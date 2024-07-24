@@ -1,5 +1,8 @@
 # HTML table to Excel xlsx file Chrome Extension
 
+![html table to excel ss](https://github.com/user-attachments/assets/0c2b922f-51ae-44e5-9ebe-6d4b539e1e92)
+
+
 ## Description
 
 This is a Chrome extension that allows you to download an HTML table as an Excel xlsx file.
