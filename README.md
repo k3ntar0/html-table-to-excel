@@ -1,6 +1,16 @@
 # HTML table to Excel xlsx file Chrome Extension
 
+## Description
+
+This is a Chrome extension that allows you to download an HTML table as an Excel xlsx file.
+
+## Usage
+
+1. Right-click (context menus) on an HTML table.
+2. Click on `Download table as Excel`.
+
 ## Development
+
 1. Clone the repository
 2. Run `pnpm install`
 3. Run `pnpm run dev`
@@ -8,4 +18,5 @@
 5. Click `Load unpacked` and select the `dist` folder.
 
 # License
+
 The source code is licensed MIT. The website content is licensed CC BY 4.0,see LICENSE.
