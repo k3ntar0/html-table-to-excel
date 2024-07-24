@@ -11,7 +11,7 @@ export default defineManifest({
     "48": "images/icon-48.png",
     "128": "images/icon-128.png",
   },
-  permissions: ["contextMenus", "activeTab"],
+  permissions: ["contextMenus"],
   background: {
     service_worker: "scripts/background.ts",
     type: "module",
