@@ -16,7 +16,3 @@ This is a Chrome extension that allows you to download an HTML table as an Excel
 3. Run `pnpm run dev`
 4. Open Chrome and go to `chrome://extensions/`
 5. Click `Load unpacked` and select the `dist` folder.
-
-# License
-
-The source code is licensed MIT. The website content is licensed CC BY 4.0,see LICENSE.
