@@ -6,8 +6,13 @@ This is a Chrome extension that allows you to download an HTML table as an Excel
 
 ## Usage
 
-1. Right-click (context menus) on an HTML table.
-2. Click on `Download table as Excel`.
+1. Download [html-table-to-excel.zip](https://github.com/k3ntar0/html-table-to-excel/blob/main/html-table-to-excel.zip)
+2. Extract the zip file.
+3. Open Chrome and go to `chrome://extensions/`
+4. Enable `Developer mode`
+5. Click `Load unpacked` and select the extracted folder.
+6. Right-click (context menus) on an HTML table.
+7. Click on `Download table as Excel`.
 
 ## Development
 
