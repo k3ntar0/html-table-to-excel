@@ -39,10 +39,10 @@ function extractTableData(table: HTMLTableElement): string[][] {
 
 function tableToXlsx(table: HTMLTableElement): void {
   const websiteName = getWebsiteName();
-  const fileName = `${websiteName}_table_data.xlsx`;
+  const fileName = `${websiteName}_table.xlsx`;
 
   const data = extractTableData(table);
-  console.log("Extracted table data:", data);
+  // console.log("Extracted table data:", data);
 
   if (data.length === 0) {
     console.log("No valid data found in the table");
@@ -62,17 +62,50 @@ function tableToXlsx(table: HTMLTableElement): void {
   }
 }
 
+function adjustTableCells(table: HTMLTableElement, highlight: boolean) {
+  const cells = table.querySelectorAll("th, td");
+  cells.forEach((cell) => {
+    if (highlight) {
+      (cell as HTMLElement).style.backgroundColor = "rgba(255, 255, 255, 0.7)";
+      (cell as HTMLElement).style.transition = "background-color 0.3s ease";
+    } else {
+      (cell as HTMLElement).style.backgroundColor = "";
+      (cell as HTMLElement).style.transition = "";
+    }
+  });
+}
+
 function highlightTable(table: HTMLTableElement) {
-  table.style.outline = "2px solid red";
-  table.style.outlineOffset = "-2px";
+  // クラスを使用してスタイルを適用
+  table.classList.add("html-table-to-excel-highlight");
+  adjustTableCells(table, true);
 }
 
 function removeHighlight(table: HTMLTableElement) {
-  table.style.outline = "";
-  table.style.outlineOffset = "";
+  // クラスを削除してスタイルを解除
+  table.classList.remove("html-table-to-excel-highlight");
+  adjustTableCells(table, false);
+}
+
+// スタイルをヘッドに追加する関数
+function addStyleToHead() {
+  const style = document.createElement("style");
+  style.textContent = `
+    .html-table-to-excel-highlight {
+      box-shadow: 0 0 0 4px rgba(0, 0, 128, 0.5) !important;
+      background-color: rgba(0, 0, 128, 0.1) !important;
+      transition: all 0.1s ease !important;
+    }
+    .html-table-to-excel-highlight th,
+    .html-table-to-excel-highlight td {
+      background-color: rgba(255, 255, 255, 0.7) !important;
+    }
+  `;
+  document.head.appendChild(style);
 }
 
 function handleContextMenu(event: MouseEvent) {
+  addStyleToHead();
   const clickedElement = event.target as Element;
   const tableElement = clickedElement.closest("table");
 
@@ -98,10 +131,22 @@ function handleClick(event: MouseEvent) {
   }
 }
 
+function checkTablePresence() {
+  const tablePresent = document.querySelector("table") !== null;
+  chrome.runtime.sendMessage({
+    action: "tablePresence",
+    present: tablePresent,
+  });
+}
+
+const observer = new MutationObserver(checkTablePresence);
+observer.observe(document.body, { childList: true, subtree: true });
+checkTablePresence();
+
 function initializeContentScript() {
   // コンテキストメニューイベントを捕捉
-  document.removeEventListener("contextmenu", handleContextMenu);
-  document.addEventListener("contextmenu", handleContextMenu);
+  document.removeEventListener("contextmenu", handleContextMenu, true);
+  document.addEventListener("contextmenu", handleContextMenu, true);
 
   // クリックイベントを捕捉
   document.removeEventListener("click", handleClick);
@@ -122,10 +167,22 @@ function initializeContentScript() {
     }
   });
 
-  console.log("HTML Table to Excel content script initialized");
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === "childList") {
+        mutation.addedNodes.forEach((node) => {
+          if (node instanceof HTMLElement && node.tagName === "TABLE") {
+            // 新しく追加されたテーブルに対する処理
+          }
+        });
+      }
+    });
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
 }
 
-// DOMContentLoadedイベントで初期化関数を呼び出す
+// ページロード時に初期化
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initializeContentScript);
 } else {
